@@ -85,15 +85,15 @@ async function runTests() {
 
     // 2. Uji Autentikasi
     console.log('\n2. Pengujian Autentikasi (Login & Rate Limit):');
-    const resBadLogin = await request('POST', '/api/auth/login', { username: 'admin', password: 'wrongpassword' });
+    const resBadLogin = await request('POST', '/api/auth/login', { username: process.env.ADMIN_USERNAME, password: 'wrongpassword' });
     assert(resBadLogin.status === 401 && resBadLogin.json.error.includes('salah'), 'Login password salah ditolak dengan pesan yang tepat');
 
-    const resGoodLogin = await request('POST', '/api/auth/login', { username: 'admin', password: 'admin123' });
+    const resGoodLogin = await request('POST', '/api/auth/login', { username: process.env.ADMIN_USERNAME, password: process.env.ADMIN_PASSWORD });
     assert(resGoodLogin.status === 200 && resGoodLogin.json.success === true, 'Login berhasil dengan kredensial benar');
     assert(cookie.includes('connect.sid'), 'Cookie session httpOnly dibuat');
 
     const resMe = await request('GET', '/api/auth/me');
-    assert(resMe.status === 200 && resMe.json.loggedIn === true && resMe.json.username === 'admin', 'Cek /api/auth/me mengembalikan status loggedIn true');
+    assert(resMe.status === 200 && resMe.json.loggedIn === true && resMe.json.username === process.env.ADMIN_USERNAME, 'Cek /api/auth/me mengembalikan status loggedIn true');
 
     // 3. Uji Halaman Setelah Login
     console.log('\n3. Pengujian Akses Halaman Setelah Login:');

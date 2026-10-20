@@ -89,9 +89,9 @@ cp .env.example .env
 Isi konfigurasi dalam file `.env`:
 ```env
 PORT=3000
-SESSION_SECRET=kunci_rahasia_acak_panjang_dan_unik_anda
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=admin123
+SESSION_SECRET=ganti_dengan_string_acak_panjang
+ADMIN_USERNAME=ganti_username_admin
+ADMIN_PASSWORD=ganti_password_admin_yang_kuat
 ```
 
 ### 4. (Opsional) Mengisi Data Contoh (Seed)
@@ -112,9 +112,7 @@ Buka browser dan akses:
 
 ## 🔑 Akun Login Default
 
-Jika Anda menggunakan konfigurasi default dari `.env`:
-- **Username:** `admin`
-- **Password:** `admin123`
+Login menggunakan nilai `ADMIN_USERNAME` dan `ADMIN_PASSWORD` yang Anda atur di file `.env` (lokal) atau di Environment Variables Netlify.
 
 *Catatan: Akun admin dibuat otomatis saat server pertama kali dijalankan.*
 

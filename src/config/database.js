@@ -84,8 +84,12 @@ function initializeDatabase() {
  * Buat akun admin jika belum ada
  */
 function seedAdmin(database) {
-  const adminUsername = process.env.ADMIN_USERNAME || 'admin';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminUsername = process.env.ADMIN_USERNAME;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminUsername || !adminPassword) {
+    console.warn('⚠️  ADMIN_USERNAME / ADMIN_PASSWORD belum diatur, akun admin tidak dibuat');
+    return;
+  }
 
   const existing = database.prepare('SELECT id FROM users WHERE username = ?').get(adminUsername);
   if (!existing) {
