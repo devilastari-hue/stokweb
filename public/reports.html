@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan - Rekap Stok Barang</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
+</head>
+<body>
+<div class="app-layout">
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">📦</div>
+      <div><h1>Rekap Stok</h1><span>Manajemen Barang</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Menu Utama</div>
+      <a href="/" class="nav-item"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a href="/items" class="nav-item"><span class="nav-icon">📦</span> Data Barang</a>
+      <a href="/transactions" class="nav-item"><span class="nav-icon">🔄</span> Transaksi</a>
+      <a href="/reports" class="nav-item active"><span class="nav-icon">📊</span> Laporan</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar user-avatar-initial">A</div>
+        <div class="user-detail">
+          <div class="user-name username-display">Admin</div>
+          <div class="user-role">Administrator</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()"><span>🚪</span> Keluar</button>
+    </div>
+  </div>
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <div class="main-content">
+    <div class="header">
+      <div class="header-left">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <h2 class="page-title">Laporan Rekap Stok</h2>
+      </div>
+      <div class="header-right">
+        <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <!-- Filter Panel -->
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header">
+          <span class="card-title">🔍 Filter Laporan</span>
+        </div>
+        <div class="card-body">
+          <div class="toolbar" style="margin-bottom:0;">
+            <div class="form-group" style="margin-bottom:0;flex:1;min-width:140px;">
+              <label class="form-label">Dari Tanggal</label>
+              <input type="date" id="laporan-dari" class="form-control">
+            </div>
+            <div class="form-group" style="margin-bottom:0;flex:1;min-width:140px;">
+              <label class="form-label">Sampai Tanggal</label>
+              <input type="date" id="laporan-sampai" class="form-control">
+            </div>
+            <div class="form-group" style="margin-bottom:0;flex:1;min-width:150px;">
+              <label class="form-label">Kategori</label>
+              <select id="laporan-kategori" class="form-control">
+                <option value="">Semua Kategori</option>
+              </select>
+            </div>
+            <div style="align-self:flex-end;display:flex;gap:8px;">
+              <button class="btn btn-primary" onclick="loadReport()">🔍 Tampilkan</button>
+              <button class="btn btn-success" onclick="exportCsv()" id="export-btn" disabled>
+                📥 Export CSV
+              </button>
+            </div>
+          </div>
+          <div id="filter-info" style="margin-top:12px;font-size:12px;color:var(--text-muted);"></div>
+        </div>
+      </div>
+
+      <!-- Tabel Laporan -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📊 Rekap per Barang</span>
+          <span id="report-count" style="font-size:13px;color:var(--text-muted);">-</span>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Nama Barang</th>
+                <th>Kategori</th>
+                <th>Total Masuk</th>
+                <th>Total Keluar</th>
+                <th>Stok Akhir (Global)</th>
+                <th>Batas Minimum</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="report-tbody">
+              <tr>
+                <td colspan="7">
+                  <div class="empty-state">
+                    <div class="empty-icon">📊</div>
+                    <h3>Pilih Filter dan Klik Tampilkan</h3>
+                    <p>Gunakan filter di atas untuk menghasilkan laporan</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Summary Row -->
+        <div id="report-summary" style="display:none;padding:16px 20px;border-top:2px solid var(--border);background:var(--surface-2);">
+          <div style="display:flex;gap:24px;flex-wrap:wrap;font-size:14px;">
+            <div>
+              <span style="color:var(--text-muted);">Total Masuk: </span>
+              <strong id="sum-masuk" style="color:var(--success);">0</strong>
+            </div>
+            <div>
+              <span style="color:var(--text-muted);">Total Keluar: </span>
+              <strong id="sum-keluar" style="color:var(--danger);">0</strong>
+            </div>
+            <div>
+              <span style="color:var(--text-muted);">Total Stok Akhir: </span>
+              <strong id="sum-stok" style="color:var(--text);">0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/reports.js"></script>
+</body>
+</html>

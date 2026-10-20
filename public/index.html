@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Rekap Stok Barang</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<div class="app-layout">
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">📦</div>
+      <div>
+        <h1>Rekap Stok</h1>
+        <span>Manajemen Barang</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Menu Utama</div>
+      <a href="/" class="nav-item active">
+        <span class="nav-icon">🏠</span> Dashboard
+      </a>
+      <a href="/items" class="nav-item">
+        <span class="nav-icon">📦</span> Data Barang
+      </a>
+      <a href="/transactions" class="nav-item">
+        <span class="nav-icon">🔄</span> Transaksi
+      </a>
+      <a href="/reports" class="nav-item">
+        <span class="nav-icon">📊</span> Laporan
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar user-avatar-initial">A</div>
+        <div class="user-detail">
+          <div class="user-name username-display">Admin</div>
+          <div class="user-role">Administrator</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">
+        <span>🚪</span> Keluar
+      </button>
+    </div>
+  </div>
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <h2 class="page-title">Dashboard</h2>
+      </div>
+      <div class="header-right">
+        <button class="dark-toggle" onclick="toggleDarkMode()" title="Ganti tema">🌙</button>
+        <span style="font-size:13px;color:var(--text-muted);" id="tanggal-hari-ini"></span>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="page-content">
+      <!-- Stat Cards -->
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon blue">📦</div>
+          <div class="stat-info">
+            <div class="stat-label">Total Jenis Barang</div>
+            <div class="stat-value" id="stat-total-items">—</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">🏪</div>
+          <div class="stat-info">
+            <div class="stat-label">Total Stok Saat Ini</div>
+            <div class="stat-value" id="stat-total-stok">—</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">⬆️</div>
+          <div class="stat-info">
+            <div class="stat-label">Masuk Bulan Ini</div>
+            <div class="stat-value" id="stat-masuk">—</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red">⬇️</div>
+          <div class="stat-info">
+            <div class="stat-label">Keluar Bulan Ini</div>
+            <div class="stat-value" id="stat-keluar">—</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon yellow">⚠️</div>
+          <div class="stat-info">
+            <div class="stat-label">Stok Menipis</div>
+            <div class="stat-value" id="stat-menipis">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Grid: Chart + Recent Tx -->
+      <div class="dashboard-grid">
+        <!-- Chart -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <span class="card-title">📈 Barang Masuk vs Keluar (30 Hari Terakhir)</span>
+          </div>
+          <div class="card-body">
+            <div class="chart-container">
+              <canvas id="stockChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="card recent-card">
+          <div class="card-header">
+            <span class="card-title">🕐 Transaksi Terbaru</span>
+            <a href="/transactions" class="btn btn-outline btn-sm">Lihat Semua</a>
+          </div>
+          <div class="card-body" style="padding-top:12px;">
+            <div id="recent-tx-list">
+              <div class="empty-state">
+                <div class="empty-icon">📋</div>
+                <h3>Memuat...</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Low Stock -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">⚠️ Peringatan Stok Menipis</span>
+          <a href="/items" class="btn btn-outline btn-sm">Lihat Semua Barang</a>
+        </div>
+        <div class="card-body" style="padding-top:12px;">
+          <div id="low-stock-list">
+            <div class="empty-state">
+              <div class="empty-icon">✅</div>
+              <h3>Memuat...</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

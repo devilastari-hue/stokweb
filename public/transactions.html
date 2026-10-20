@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaksi - Rekap Stok Barang</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
+</head>
+<body>
+<div class="app-layout">
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">📦</div>
+      <div><h1>Rekap Stok</h1><span>Manajemen Barang</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Menu Utama</div>
+      <a href="/" class="nav-item"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a href="/items" class="nav-item"><span class="nav-icon">📦</span> Data Barang</a>
+      <a href="/transactions" class="nav-item active"><span class="nav-icon">🔄</span> Transaksi</a>
+      <a href="/reports" class="nav-item"><span class="nav-icon">📊</span> Laporan</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar user-avatar-initial">A</div>
+        <div class="user-detail">
+          <div class="user-name username-display">Admin</div>
+          <div class="user-role">Administrator</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()"><span>🚪</span> Keluar</button>
+    </div>
+  </div>
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <div class="main-content">
+    <div class="header">
+      <div class="header-left">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <h2 class="page-title">Transaksi</h2>
+      </div>
+      <div class="header-right">
+        <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+      </div>
+    </div>
+
+    <div class="page-content">
+      <div style="display:grid;grid-template-columns:360px 1fr;gap:20px;align-items:start;">
+
+        <!-- Form Catat Transaksi -->
+        <div class="card" style="position:sticky;top:calc(var(--header-height) + 16px);">
+          <div class="card-header">
+            <span class="card-title">🔄 Catat Transaksi</span>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Barang <span style="color:var(--danger)">*</span></label>
+              <select id="tx-item" class="form-control" onchange="updateStokInfo()">
+                <option value="">-- Pilih Barang --</option>
+              </select>
+            </div>
+
+            <!-- Info stok barang yang dipilih -->
+            <div id="stok-info" style="display:none;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:13px;">
+              <div style="color:var(--text-muted);">Stok tersedia:</div>
+              <div style="font-size:18px;font-weight:700;color:var(--text);" id="stok-tersedia">0</div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Jenis <span style="color:var(--danger)">*</span></label>
+                <select id="tx-jenis" class="form-control">
+                  <option value="masuk">⬆️ Masuk</option>
+                  <option value="keluar">⬇️ Keluar</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Jumlah <span style="color:var(--danger)">*</span></label>
+                <input type="number" id="tx-jumlah" class="form-control" placeholder="0" min="1">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Tanggal <span style="color:var(--danger)">*</span></label>
+              <input type="date" id="tx-tanggal" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Keterangan</label>
+              <textarea id="tx-keterangan" class="form-control" rows="2" placeholder="Opsional..."></textarea>
+            </div>
+
+            <button class="btn btn-primary w-full" id="tx-submit" onclick="submitTransaction()">
+              💾 Simpan Transaksi
+            </button>
+          </div>
+        </div>
+
+        <!-- Riwayat Transaksi -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📋 Riwayat Transaksi</span>
+          </div>
+          <div class="card-body" style="padding-bottom:0;">
+            <!-- Filter Riwayat -->
+            <div class="toolbar" style="margin-bottom:0;padding-bottom:16px;border-bottom:1px solid var(--border);">
+              <input type="date" id="filter-dari" class="form-control" style="width:auto;" placeholder="Dari">
+              <input type="date" id="filter-sampai" class="form-control" style="width:auto;" placeholder="Sampai">
+              <select id="filter-jenis" class="form-control" style="width:auto;">
+                <option value="">Semua Jenis</option>
+                <option value="masuk">Masuk</option>
+                <option value="keluar">Keluar</option>
+              </select>
+              <select id="filter-item" class="form-control" style="width:auto;min-width:140px;">
+                <option value="">Semua Barang</option>
+              </select>
+              <button class="btn btn-outline btn-sm" onclick="resetFilter()">Reset</button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Barang</th>
+                  <th>Kategori</th>
+                  <th>Jenis</th>
+                  <th>Jumlah</th>
+                  <th>Keterangan</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tx-tbody">
+                <tr><td colspan="7" class="text-center" style="padding:40px;color:var(--text-muted);">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <span id="tx-pagination-info">-</span>
+            <div class="pagination-btns" id="tx-pagination-btns"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/transactions.js"></script>
+</body>
+</html>
