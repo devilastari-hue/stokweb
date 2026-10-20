@@ -112,5 +112,5 @@ for (const tx of recentTx) {
 console.log(`✅ ${recentTx.length + stockIn.length} transaksi berhasil ditambahkan`);
 console.log('');
 console.log('✨ Seeding selesai! Buka http://localhost:' + (process.env.PORT || 3000) + ' dan login.');
-console.log('   Username:', process.env.ADMIN_USERNAME || 'admin');
-console.log('   Password:', process.env.ADMIN_PASSWORD || 'admin123');
+console.log('   Username:', process.env.ADMIN_USERNAME);
+console.log('   Password: (lihat ADMIN_PASSWORD di file .env)');

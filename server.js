@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Konfigurasi session dengan cookie httpOnly
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'stokweb-secret-key-fallback',
+  secret: process.env.SESSION_SECRET || require('crypto').randomBytes(32).toString('hex'),
   resave: false,
   saveUninitialized: false,
   cookie: {

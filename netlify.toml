@@ -11,3 +11,8 @@
   from = "/*"
   to = "/.netlify/functions/api"
   status = 200
+
+# ADMIN_USERNAME is not a secret, and its value is a common word that appears
+# in dependency code, so exclude it from secrets scanning.
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "ADMIN_USERNAME"
