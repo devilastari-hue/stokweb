@@ -9,8 +9,9 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const fs = require('fs');
 
-// Pastikan direktori data ada
-const dataDir = path.join(__dirname, '../../data');
+// Pastikan direktori data ada (gunakan /tmp untuk lingkungan serverless seperti Netlify/AWS Lambda)
+const isServerless = process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.LAMBDA_TASK_ROOT;
+const dataDir = isServerless ? '/tmp' : path.join(__dirname, '../../data');
 if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
